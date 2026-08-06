@@ -27,6 +27,9 @@ interface GoogleMapOptionsSink {
 
   void setScrollGesturesEnabled(boolean scrollGesturesEnabled);
 
+  void setScrollGesturesDuringRotateOrZoomEnabled(
+      boolean scrollGesturesDuringRotateOrZoomEnabled);
+
   void setTiltGesturesEnabled(boolean tiltGesturesEnabled);
 
   void setTrackCameraPosition(boolean trackCameraPosition);

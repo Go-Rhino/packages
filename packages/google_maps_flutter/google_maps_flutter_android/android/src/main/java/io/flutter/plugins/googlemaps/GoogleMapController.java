@@ -576,6 +576,14 @@ class GoogleMapController
   }
 
   @Override
+  public void setScrollGesturesDuringRotateOrZoomEnabled(
+      boolean scrollGesturesDuringRotateOrZoomEnabled) {
+    googleMap
+        .getUiSettings()
+        .setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesDuringRotateOrZoomEnabled);
+  }
+
+  @Override
   public void setTiltGesturesEnabled(boolean tiltGesturesEnabled) {
     googleMap.getUiSettings().setTiltGesturesEnabled(tiltGesturesEnabled);
   }

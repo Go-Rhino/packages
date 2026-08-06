@@ -1443,6 +1443,8 @@ PlatformMapConfiguration _platformMapConfigurationFromMapConfiguration(
     mapToolbarEnabled: config.mapToolbarEnabled,
     rotateGesturesEnabled: config.rotateGesturesEnabled,
     scrollGesturesEnabled: config.scrollGesturesEnabled,
+    scrollGesturesDuringRotateOrZoomEnabled:
+        config.scrollGesturesDuringRotateOrZoomEnabled,
     tiltGesturesEnabled: config.tiltGesturesEnabled,
     trackCameraPosition: config.trackCameraPosition,
     zoomControlsEnabled: config.zoomControlsEnabled,
@@ -1484,6 +1486,8 @@ PlatformMapConfiguration _platformMapConfigurationFromOptionsJson(
     mapToolbarEnabled: options['mapToolbarEnabled'] as bool?,
     rotateGesturesEnabled: options['rotateGesturesEnabled'] as bool?,
     scrollGesturesEnabled: options['scrollGesturesEnabled'] as bool?,
+    scrollGesturesDuringRotateOrZoomEnabled:
+        options['scrollGesturesDuringRotateOrZoomEnabled'] as bool?,
     tiltGesturesEnabled: options['tiltGesturesEnabled'] as bool?,
     trackCameraPosition: options['trackCameraPosition'] as bool?,
     zoomControlsEnabled: options['zoomControlsEnabled'] as bool?,

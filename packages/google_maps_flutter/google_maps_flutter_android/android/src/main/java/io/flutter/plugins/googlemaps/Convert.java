@@ -533,6 +533,11 @@ class Convert {
     if (scrollGesturesEnabled != null) {
       sink.setScrollGesturesEnabled(scrollGesturesEnabled);
     }
+    final Boolean scrollGesturesDuringRotateOrZoomEnabled =
+        config.getScrollGesturesDuringRotateOrZoomEnabled();
+    if (scrollGesturesDuringRotateOrZoomEnabled != null) {
+      sink.setScrollGesturesDuringRotateOrZoomEnabled(scrollGesturesDuringRotateOrZoomEnabled);
+    }
     final Boolean tiltGesturesEnabled = config.getTiltGesturesEnabled();
     if (tiltGesturesEnabled != null) {
       sink.setTiltGesturesEnabled(tiltGesturesEnabled);
