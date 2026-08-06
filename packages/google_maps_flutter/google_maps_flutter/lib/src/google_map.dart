@@ -118,6 +118,7 @@ class GoogleMap extends StatefulWidget {
     this.minMaxZoomPreference = MinMaxZoomPreference.unbounded,
     this.rotateGesturesEnabled = true,
     this.scrollGesturesEnabled = true,
+    this.scrollGesturesDuringRotateOrZoomEnabled = true,
     this.zoomControlsEnabled = true,
     this.zoomGesturesEnabled = true,
     this.liteModeEnabled = false,
@@ -203,6 +204,20 @@ class GoogleMap extends StatefulWidget {
 
   /// True if the map view should respond to scroll gestures.
   final bool scrollGesturesEnabled;
+
+  /// True if the map may be scrolled at the same time as a rotate or zoom
+  /// gesture.
+  ///
+  /// When false, the camera centre stays fixed for the duration of such a
+  /// gesture, so a pinch zooms about the camera target instead of about the
+  /// midpoint between the fingers. Useful when a fixed on-screen overlay marks
+  /// the point being picked and must keep referring to the same coordinate
+  /// across a zoom.
+  ///
+  /// Defaults to true, matching both native SDKs.
+  ///
+  /// This is only supported on Android and iOS, and is silently ignored on web.
+  final bool scrollGesturesDuringRotateOrZoomEnabled;
 
   /// True if the map view should show zoom controls. This includes two buttons
   /// to zoom in and zoom out. The default value is to show zoom controls.
@@ -764,6 +779,8 @@ MapConfiguration _configurationFromMapWidget(GoogleMap map) {
     minMaxZoomPreference: map.minMaxZoomPreference,
     rotateGesturesEnabled: map.rotateGesturesEnabled,
     scrollGesturesEnabled: map.scrollGesturesEnabled,
+    scrollGesturesDuringRotateOrZoomEnabled:
+        map.scrollGesturesDuringRotateOrZoomEnabled,
     tiltGesturesEnabled: map.tiltGesturesEnabled,
     fortyFiveDegreeImageryEnabled: map.fortyFiveDegreeImageryEnabled,
     trackCameraPosition: map.onCameraMove != null,
