@@ -250,7 +250,8 @@
                                                buildingsEnabled:nil
                                                      markerType:FGMPlatformMarkerTypeMarker
                                                           mapId:nil
-                                                          style:nil]
+                                                          style:nil
+                        scrollGesturesDuringRotateOrZoomEnabled:nil]
                      initialCircles:@[]
                      initialMarkers:@[]
                     initialPolygons:@[]
