@@ -27,6 +27,7 @@ void main() {
       minMaxZoomPreference: const MinMaxZoomPreference(1.0, 10.0),
       rotateGesturesEnabled: false,
       scrollGesturesEnabled: false,
+      scrollGesturesDuringRotateOrZoomEnabled: false,
       tiltGesturesEnabled: false,
       fortyFiveDegreeImageryEnabled: false,
       trackCameraPosition: false,
@@ -239,6 +240,24 @@ void main() {
       expect(diff.diffFrom(empty), diff);
       // A diff applied to non-empty options should update that field.
       expect(updated.scrollGesturesEnabled, true);
+      // The hash code should change.
+      expect(empty.hashCode, isNot(diff.hashCode));
+    });
+
+    test('handle scrollGesturesDuringRotateOrZoomEnabled', () async {
+      const diff = MapConfiguration(
+        scrollGesturesDuringRotateOrZoomEnabled: true,
+      );
+
+      const empty = MapConfiguration();
+      final MapConfiguration updated = diffBase.applyDiff(diff);
+
+      // A diff applied to empty options should be the diff itself.
+      expect(empty.applyDiff(diff), diff);
+      // The diff from empty options should be the diff itself.
+      expect(diff.diffFrom(empty), diff);
+      // A diff applied to non-empty options should update that field.
+      expect(updated.scrollGesturesDuringRotateOrZoomEnabled, true);
       // The hash code should change.
       expect(empty.hashCode, isNot(diff.hashCode));
     });
@@ -569,6 +588,14 @@ void main() {
 
     test('is false with scrollGesturesEnabled', () async {
       const diff = MapConfiguration(scrollGesturesEnabled: true);
+
+      expect(diff.isEmpty, false);
+    });
+
+    test('is false with scrollGesturesDuringRotateOrZoomEnabled', () async {
+      const diff = MapConfiguration(
+        scrollGesturesDuringRotateOrZoomEnabled: true,
+      );
 
       expect(diff.isEmpty, false);
     });

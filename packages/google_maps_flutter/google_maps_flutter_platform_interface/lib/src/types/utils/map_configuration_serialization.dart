@@ -32,6 +32,9 @@ Map<String, Object> jsonForMapConfiguration(MapConfiguration config) {
       'rotateGesturesEnabled': config.rotateGesturesEnabled!,
     if (config.scrollGesturesEnabled != null)
       'scrollGesturesEnabled': config.scrollGesturesEnabled!,
+    if (config.scrollGesturesDuringRotateOrZoomEnabled != null)
+      'scrollGesturesDuringRotateOrZoomEnabled':
+          config.scrollGesturesDuringRotateOrZoomEnabled!,
     if (config.tiltGesturesEnabled != null)
       'tiltGesturesEnabled': config.tiltGesturesEnabled!,
     if (config.zoomControlsEnabled != null)
