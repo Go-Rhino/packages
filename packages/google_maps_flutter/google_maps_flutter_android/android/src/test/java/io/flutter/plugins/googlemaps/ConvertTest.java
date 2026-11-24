@@ -434,6 +434,16 @@ public class ConvertTest {
   }
 
   @Test
+  public void interpretMapConfiguration_handlesScrollGesturesDuringRotateOrZoomEnabled() {
+    final PlatformMapConfiguration config =
+        getMinimalConfigurationBuilder()
+            .setScrollGesturesDuringRotateOrZoomEnabled(false)
+            .build();
+    Convert.interpretMapConfiguration(config, optionsSink);
+    verify(optionsSink, times(1)).setScrollGesturesDuringRotateOrZoomEnabled(false);
+  }
+
+  @Test
   public void interpretMapConfiguration_handlesTiltGesturesEnabled() {
     final PlatformMapConfiguration config =
         getMinimalConfigurationBuilder().setTiltGesturesEnabled(false).build();
@@ -845,6 +855,7 @@ public class ConvertTest {
     private @Nullable Boolean mapToolbarEnabled;
     private @Nullable Boolean rotateGesturesEnabled;
     private @Nullable Boolean scrollGesturesEnabled;
+    private @Nullable Boolean scrollGesturesDuringRotateOrZoomEnabled;
     private @Nullable Boolean tiltGesturesEnabled;
     private @Nullable Boolean trackCameraPosition;
     private @Nullable Boolean zoomControlsEnabled;
@@ -898,6 +909,12 @@ public class ConvertTest {
     public @NonNull PlatformMapConfigurationBuilder setScrollGesturesEnabled(
         @Nullable Boolean setterArg) {
       this.scrollGesturesEnabled = setterArg;
+      return this;
+    }
+
+    public @NonNull PlatformMapConfigurationBuilder setScrollGesturesDuringRotateOrZoomEnabled(
+        @Nullable Boolean setterArg) {
+      this.scrollGesturesDuringRotateOrZoomEnabled = setterArg;
       return this;
     }
 
@@ -1004,7 +1021,8 @@ public class ConvertTest {
           liteModeEnabled,
           Objects.requireNonNull(markerType),
           mapId,
-          style);
+          style,
+          scrollGesturesDuringRotateOrZoomEnabled);
     }
   }
 }

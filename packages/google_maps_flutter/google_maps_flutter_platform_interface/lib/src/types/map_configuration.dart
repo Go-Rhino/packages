@@ -25,6 +25,7 @@ class MapConfiguration {
     this.minMaxZoomPreference,
     this.rotateGesturesEnabled,
     this.scrollGesturesEnabled,
+    this.scrollGesturesDuringRotateOrZoomEnabled,
     this.tiltGesturesEnabled,
     this.fortyFiveDegreeImageryEnabled,
     this.trackCameraPosition,
@@ -84,6 +85,20 @@ class MapConfiguration {
   ///
   /// Android/iOS only. For web, see [webGestureHandling].
   final bool? scrollGesturesEnabled;
+
+  /// True if the map may be scrolled at the same time as a rotate or zoom
+  /// gesture.
+  ///
+  /// When false, the camera centre stays fixed for the duration of such a
+  /// gesture, so a pinch zooms about the camera target instead of about the
+  /// midpoint between the fingers. Useful when a fixed on-screen overlay marks
+  /// the point being picked and must keep referring to the same coordinate
+  /// across a zoom.
+  ///
+  /// Defaults to true, matching both native SDKs.
+  ///
+  /// Android/iOS only.
+  final bool? scrollGesturesDuringRotateOrZoomEnabled;
 
   /// True if tilt gestures should be enabled.
   final bool? tiltGesturesEnabled;
@@ -194,6 +209,11 @@ class MapConfiguration {
           scrollGesturesEnabled != other.scrollGesturesEnabled
           ? scrollGesturesEnabled
           : null,
+      scrollGesturesDuringRotateOrZoomEnabled:
+          scrollGesturesDuringRotateOrZoomEnabled !=
+              other.scrollGesturesDuringRotateOrZoomEnabled
+          ? scrollGesturesDuringRotateOrZoomEnabled
+          : null,
       tiltGesturesEnabled: tiltGesturesEnabled != other.tiltGesturesEnabled
           ? tiltGesturesEnabled
           : null,
@@ -255,6 +275,9 @@ class MapConfiguration {
           diff.rotateGesturesEnabled ?? rotateGesturesEnabled,
       scrollGesturesEnabled:
           diff.scrollGesturesEnabled ?? scrollGesturesEnabled,
+      scrollGesturesDuringRotateOrZoomEnabled:
+          diff.scrollGesturesDuringRotateOrZoomEnabled ??
+          scrollGesturesDuringRotateOrZoomEnabled,
       tiltGesturesEnabled: diff.tiltGesturesEnabled ?? tiltGesturesEnabled,
       fortyFiveDegreeImageryEnabled:
           diff.fortyFiveDegreeImageryEnabled ?? fortyFiveDegreeImageryEnabled,
@@ -288,6 +311,7 @@ class MapConfiguration {
       minMaxZoomPreference == null &&
       rotateGesturesEnabled == null &&
       scrollGesturesEnabled == null &&
+      scrollGesturesDuringRotateOrZoomEnabled == null &&
       tiltGesturesEnabled == null &&
       fortyFiveDegreeImageryEnabled == null &&
       trackCameraPosition == null &&
@@ -324,6 +348,8 @@ class MapConfiguration {
         minMaxZoomPreference == other.minMaxZoomPreference &&
         rotateGesturesEnabled == other.rotateGesturesEnabled &&
         scrollGesturesEnabled == other.scrollGesturesEnabled &&
+        scrollGesturesDuringRotateOrZoomEnabled ==
+            other.scrollGesturesDuringRotateOrZoomEnabled &&
         tiltGesturesEnabled == other.tiltGesturesEnabled &&
         fortyFiveDegreeImageryEnabled == other.fortyFiveDegreeImageryEnabled &&
         trackCameraPosition == other.trackCameraPosition &&
@@ -354,6 +380,7 @@ class MapConfiguration {
     minMaxZoomPreference,
     rotateGesturesEnabled,
     scrollGesturesEnabled,
+    scrollGesturesDuringRotateOrZoomEnabled,
     tiltGesturesEnabled,
     fortyFiveDegreeImageryEnabled,
     trackCameraPosition,

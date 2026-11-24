@@ -458,6 +458,10 @@
   self.mapView.settings.scrollGestures = enabled;
 }
 
+- (void)setScrollGesturesDuringRotateOrZoomEnabled:(BOOL)enabled {
+  self.mapView.settings.allowScrollGesturesDuringRotateOrZoom = enabled;
+}
+
 - (void)setTiltGesturesEnabled:(BOOL)enabled {
   self.mapView.settings.tiltGestures = enabled;
 }
@@ -612,6 +616,12 @@
   NSNumber *scrollGesturesEnabled = config.scrollGesturesEnabled;
   if (scrollGesturesEnabled != nil) {
     [self setScrollGesturesEnabled:scrollGesturesEnabled.boolValue];
+  }
+  NSNumber *scrollGesturesDuringRotateOrZoomEnabled =
+      config.scrollGesturesDuringRotateOrZoomEnabled;
+  if (scrollGesturesDuringRotateOrZoomEnabled != nil) {
+    [self setScrollGesturesDuringRotateOrZoomEnabled:scrollGesturesDuringRotateOrZoomEnabled
+                                                        .boolValue];
   }
   NSNumber *tiltGesturesEnabled = config.tiltGesturesEnabled;
   if (tiltGesturesEnabled != nil) {

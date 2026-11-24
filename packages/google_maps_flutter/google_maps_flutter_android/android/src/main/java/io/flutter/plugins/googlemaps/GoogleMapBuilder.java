@@ -121,6 +121,12 @@ class GoogleMapBuilder implements GoogleMapOptionsSink {
   }
 
   @Override
+  public void setScrollGesturesDuringRotateOrZoomEnabled(
+      boolean scrollGesturesDuringRotateOrZoomEnabled) {
+    options.scrollGesturesEnabledDuringRotateOrZoom(scrollGesturesDuringRotateOrZoomEnabled);
+  }
+
+  @Override
   public void setTiltGesturesEnabled(boolean tiltGesturesEnabled) {
     options.tiltGesturesEnabled(tiltGesturesEnabled);
   }

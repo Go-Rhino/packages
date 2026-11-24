@@ -508,6 +508,10 @@ class PlatformMapConfiguration {
     required this.markerType,
     required this.mapId,
     required this.style,
+    // Appended deliberately: the generated codec encodes this class as a
+    // positional list, so a new field must go last to stay wire-compatible
+    // with any generated code that has not been regenerated yet.
+    required this.scrollGesturesDuringRotateOrZoomEnabled,
   });
 
   final bool? compassEnabled;
@@ -531,6 +535,7 @@ class PlatformMapConfiguration {
   final PlatformMarkerType markerType;
   final String? mapId;
   final String? style;
+  final bool? scrollGesturesDuringRotateOrZoomEnabled;
 }
 
 /// Pigeon representation of an x,y coordinate.
