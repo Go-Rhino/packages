@@ -83,7 +83,8 @@ class PolylinesController {
   private void addPolyline(
       String polylineId, PolylineOptions polylineOptions, boolean consumeTapEvents) {
     final Polyline polyline = googleMap.addPolyline(polylineOptions);
-    PolylineController controller = new PolylineController(polyline, consumeTapEvents, density);
+    PolylineController controller =
+        new PolylineController(polyline, polylineOptions, consumeTapEvents, density);
     polylineIdToController.put(polylineId, controller);
     googleMapsPolylineIdToDartPolylineId.put(polyline.getId(), polylineId);
   }

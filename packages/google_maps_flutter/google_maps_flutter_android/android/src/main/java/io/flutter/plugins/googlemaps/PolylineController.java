@@ -8,7 +8,9 @@ import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.List;
+import java.util.Objects;
 
 /** Controller of a single Polyline on the map. */
 class PolylineController implements PolylineOptionsSink {
@@ -17,11 +19,37 @@ class PolylineController implements PolylineOptionsSink {
   private boolean consumeTapEvents;
   private final float density;
 
-  PolylineController(Polyline polyline, boolean consumeTapEvents, float density) {
+  // Rhino fork: an in-place update re-applies every option, so a polyline animated every frame
+  // made eleven native calls per frame where one or two values changed. These mirror the options
+  // last applied to the map, and the setters skip values that are already there.
+  private int color;
+  private Cap endCap;
+  private boolean geodesic;
+  private int jointType;
+  private List<PatternItem> pattern;
+  private List<LatLng> points;
+  private Cap startCap;
+  private boolean visible;
+  private float scaledWidth;
+  private float zIndex;
+
+  PolylineController(
+      Polyline polyline, PolylineOptions options, boolean consumeTapEvents, float density) {
     this.polyline = polyline;
     this.consumeTapEvents = consumeTapEvents;
     this.density = density;
     this.googleMapsPolylineId = polyline.getId();
+    // Rhino fork.
+    this.color = options.getColor();
+    this.endCap = options.getEndCap();
+    this.geodesic = options.isGeodesic();
+    this.jointType = options.getJointType();
+    this.pattern = options.getPattern();
+    this.points = options.getPoints();
+    this.startCap = options.getStartCap();
+    this.visible = options.isVisible();
+    this.scaledWidth = options.getWidth();
+    this.zIndex = options.getZIndex();
   }
 
   void remove() {
@@ -30,58 +58,91 @@ class PolylineController implements PolylineOptionsSink {
 
   @Override
   public void setConsumeTapEvents(boolean consumeTapEvents) {
-    this.consumeTapEvents = consumeTapEvents;
-    polyline.setClickable(consumeTapEvents);
+    if (this.consumeTapEvents != consumeTapEvents) {
+      this.consumeTapEvents = consumeTapEvents;
+      polyline.setClickable(consumeTapEvents);
+    }
   }
 
   @Override
   public void setColor(int color) {
-    polyline.setColor(color);
+    if (this.color != color) {
+      this.color = color;
+      polyline.setColor(color);
+    }
   }
 
   @Override
   public void setEndCap(Cap endCap) {
-    polyline.setEndCap(endCap);
+    if (!Objects.equals(this.endCap, endCap)) {
+      this.endCap = endCap;
+      polyline.setEndCap(endCap);
+    }
   }
 
   @Override
   public void setGeodesic(boolean geodesic) {
-    polyline.setGeodesic(geodesic);
+    if (this.geodesic != geodesic) {
+      this.geodesic = geodesic;
+      polyline.setGeodesic(geodesic);
+    }
   }
 
   @Override
   public void setJointType(int jointType) {
-    polyline.setJointType(jointType);
+    if (this.jointType != jointType) {
+      this.jointType = jointType;
+      polyline.setJointType(jointType);
+    }
   }
 
   @Override
   public void setPattern(List<PatternItem> pattern) {
-    polyline.setPattern(pattern);
+    if (!Objects.equals(this.pattern, pattern)) {
+      this.pattern = pattern;
+      polyline.setPattern(pattern);
+    }
   }
 
   @Override
   public void setPoints(List<LatLng> points) {
-    polyline.setPoints(points);
+    if (!Objects.equals(this.points, points)) {
+      this.points = points;
+      polyline.setPoints(points);
+    }
   }
 
   @Override
   public void setStartCap(Cap startCap) {
-    polyline.setStartCap(startCap);
+    if (!Objects.equals(this.startCap, startCap)) {
+      this.startCap = startCap;
+      polyline.setStartCap(startCap);
+    }
   }
 
   @Override
   public void setVisible(boolean visible) {
-    polyline.setVisible(visible);
+    if (this.visible != visible) {
+      this.visible = visible;
+      polyline.setVisible(visible);
+    }
   }
 
   @Override
   public void setWidth(float width) {
-    polyline.setWidth(width * density);
+    final float scaledWidth = width * density;
+    if (this.scaledWidth != scaledWidth) {
+      this.scaledWidth = scaledWidth;
+      polyline.setWidth(scaledWidth);
+    }
   }
 
   @Override
   public void setZIndex(float zIndex) {
-    polyline.setZIndex(zIndex);
+    if (this.zIndex != zIndex) {
+      this.zIndex = zIndex;
+      polyline.setZIndex(zIndex);
+    }
   }
 
   String getGoogleMapsPolylineId() {
