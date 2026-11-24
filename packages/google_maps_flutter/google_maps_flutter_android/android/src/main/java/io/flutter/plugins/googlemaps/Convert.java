@@ -591,12 +591,23 @@ class Convert {
       AssetManager assetManager,
       float density,
       BitmapDescriptorFactoryWrapper wrapper) {
+    sink.setIcon(toBitmapDescriptor(marker.getIcon(), assetManager, density, wrapper));
+    interpretMarkerOptionsExceptIcon(marker, sink);
+  }
+
+  /**
+   * Sets every option of {@code marker} except the icon, which is costly to decode and blinks the
+   * marker when re-applied.
+   *
+   * <p>Rhino fork (RHN-6122): split out of {@link #interpretMarkerOptions} so that an in-place
+   * marker update can leave an unchanged icon alone. Keep in sync with upstream on rebase.
+   */
+  static void interpretMarkerOptionsExceptIcon(PlatformMarker marker, MarkerOptionsSink sink) {
     sink.setAlpha((float) marker.getAlpha());
     sink.setAnchor((float) marker.getAnchor().getX(), (float) marker.getAnchor().getY());
     sink.setConsumeTapEvents(marker.getConsumeTapEvents());
     sink.setDraggable(marker.getDraggable());
     sink.setFlat(marker.getFlat());
-    sink.setIcon(toBitmapDescriptor(marker.getIcon(), assetManager, density, wrapper));
     interpretInfoWindowOptions(sink, marker.getInfoWindow());
     sink.setPosition(latLngFromPigeon(marker.getPosition()));
     sink.setRotation((float) marker.getRotation());
