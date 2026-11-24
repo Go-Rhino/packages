@@ -18,8 +18,6 @@ class MarkerBuilder implements MarkerOptionsSink, ClusterItem {
   private final String clusterManagerId;
   private final String markerId;
   private boolean consumeTapEvents;
-  // Rhino fork (RHN-6122): lets MarkersController skip re-applying an unchanged icon.
-  private @Nullable PlatformBitmap sourceIcon;
 
   MarkerBuilder(String markerId, String clusterManagerId, @NonNull PlatformMarkerType markerType) {
     switch (markerType) {
@@ -39,16 +37,6 @@ class MarkerBuilder implements MarkerOptionsSink, ClusterItem {
 
   MarkerOptions build() {
     return markerOptions;
-  }
-
-  /** The icon this marker was last built from, before conversion to a {@link BitmapDescriptor}. */
-  @Nullable
-  PlatformBitmap sourceIcon() {
-    return sourceIcon;
-  }
-
-  void setSourceIcon(@NonNull PlatformBitmap sourceIcon) {
-    this.sourceIcon = sourceIcon;
   }
 
   /** Update existing markerOptions with builder values */
