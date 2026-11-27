@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -278,6 +279,39 @@ public class MarkersControllerTest {
     Mockito.verify(clusterManagersController, times(0)).removeItem(any());
 
     Mockito.verify(spyMarkerCollection, times(1)).remove(marker);
+  }
+
+  // Rhino fork.
+  @Test
+  public void controller_ChangeMarkerInPlaceReappliesOnlyChangedIcon() {
+    final Marker marker = mock(Marker.class);
+    final String markerId = "car";
+    when(marker.getId()).thenReturn(markerId);
+    when(googleMap.addMarker(any(MarkerOptions.class))).thenReturn(marker);
+
+    final PlatformMarkerBuilder builder = defaultMarkerBuilder().setMarkerId(markerId);
+    controller.addMarkers(Collections.singletonList(builder.build()));
+
+    // An equal icon arrives as a new byte array on every Dart-side update.
+    final LatLng newLatLng = new LatLng(3.0, 4.0);
+    builder
+        .setIcon(defaultMarkerBuilder().setMarkerId(markerId).build().getIcon())
+        .setPosition(new PlatformLatLng(newLatLng.latitude, newLatLng.longitude));
+    controller.changeMarkers(Collections.singletonList(builder.build()));
+
+    Mockito.verify(marker, times(1)).setPosition(newLatLng);
+    Mockito.verify(marker, never()).setIcon(any());
+
+    Bitmap otherBitmap = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888);
+    ByteArrayOutputStream otherBytes = new ByteArrayOutputStream();
+    otherBitmap.compress(Bitmap.CompressFormat.PNG, 100, otherBytes);
+    builder.setIcon(
+        new PlatformBitmap(
+            new PlatformBitmapBytesMap(
+                otherBytes.toByteArray(), PlatformMapBitmapScaling.NONE, 1.0, null, null)));
+    controller.changeMarkers(Collections.singletonList(builder.build()));
+
+    Mockito.verify(marker, times(1)).setIcon(any());
   }
 
   @Test

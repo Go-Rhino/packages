@@ -63,6 +63,7 @@ class MarkersController {
       MarkerBuilder markerBuilder = new MarkerBuilder(markerId, clusterManagerId, markerType);
       Convert.interpretMarkerOptions(
           markerToAdd, markerBuilder, assetManager, density, bitmapDescriptorFactoryWrapper);
+      markerBuilder.setSourceIcon(markerToAdd.getIcon()); // Rhino fork
 
       // Store marker builder for future marker rebuilds when used under clusters.
       markerIdToMarkerBuilder.put(markerId, markerBuilder);
@@ -119,6 +120,7 @@ class MarkersController {
             assetManager,
             density,
             bitmapDescriptorFactoryWrapper);
+        newMarkerBuilder.setSourceIcon(markerToChange.getIcon()); // Rhino fork
         markerIdToMarkerBuilder.put(markerId, newMarkerBuilder);
 
         if (clusterManagerId != null) {
@@ -139,18 +141,19 @@ class MarkersController {
           }
         }
       } else {
-        // Update existing marker in place
-        Convert.interpretMarkerOptions(
-            markerToChange, markerBuilder, assetManager, density, bitmapDescriptorFactoryWrapper);
+        // Update existing marker in place.
+        // Rhino fork: Marker.setIcon blinks the marker even with an identical bitmap, so a marker
+        // updated every frame flickers. An unchanged icon (compared by content) is neither decoded
+        // nor re-applied. https://github.com/flutter/flutter/issues/147153
+        final PlatformBitmap icon = markerToChange.getIcon();
+        final boolean iconChanged = !icon.equals(markerBuilder.sourceIcon());
+        updateMarkerOptions(markerToChange, markerBuilder, iconChanged);
         MarkerController markerController = markerIdToController.get(markerId);
         if (markerController != null) {
-          Convert.interpretMarkerOptions(
-              markerToChange,
-              markerController,
-              assetManager,
-              density,
-              bitmapDescriptorFactoryWrapper);
+          updateMarkerOptions(markerToChange, markerController, iconChanged);
         }
+        // Recorded only once applied, so an icon that failed to convert is retried next time.
+        markerBuilder.setSourceIcon(icon);
       }
     }
 
@@ -162,6 +165,17 @@ class MarkersController {
     // Batch add to cluster managers
     for (Map.Entry<String, List<MarkerBuilder>> entry : markersToAddByCluster.entrySet()) {
       clusterManagersController.addItems(entry.getKey(), entry.getValue());
+    }
+  }
+
+  // Rhino fork.
+  private void updateMarkerOptions(
+      @NonNull PlatformMarker marker, @NonNull MarkerOptionsSink sink, boolean withIcon) {
+    if (withIcon) {
+      Convert.interpretMarkerOptions(
+          marker, sink, assetManager, density, bitmapDescriptorFactoryWrapper);
+    } else {
+      Convert.interpretMarkerOptionsExceptIcon(marker, sink);
     }
   }
 
